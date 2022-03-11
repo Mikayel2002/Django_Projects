@@ -1,0 +1,11 @@
+git status
+git add .
+git commit -m "message"
+git push
+
+
+if branch is renamed
+git branch -m new_branch main
+git fetch origin
+git branch -u origin/main main
+git remote set-head origin -a
