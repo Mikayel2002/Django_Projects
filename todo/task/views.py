@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, HttpResponse, redirect
+from django.contrib import messages
 from task.forms import TaskForm, TaskModelForms, TaskUpdateModelForm
 from task.models import Task
 
@@ -31,6 +32,7 @@ def task_create(request):
             task = form.save(commit=False)
             task.user = request.user
             task.save()
+            messages.success(request, f"task {task.name} was created successfully")
             
             return redirect("task_view", task_id=task.id)
 

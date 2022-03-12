@@ -2,7 +2,8 @@ from telnetlib import AUTHENTICATION
 from django.shortcuts import redirect, render
 from django.contrib.auth.forms import UserCreationForm
 from user.forms import UserLoginForm
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
+
 
 # Create your views here.
 
@@ -41,3 +42,7 @@ def user_login(request):
 
     return render(request, "user/user_login.html", context)
 
+
+def user_logout(request):
+    logout(request)
+    return redirect('list_task')
