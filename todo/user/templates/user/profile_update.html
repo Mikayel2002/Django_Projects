@@ -1,11 +1,11 @@
 {% extends 'task/base.html' %}
 
 	{% block content %}
-				<h3>Login</h3>
-		<form method="POST" >
+				<h3>Update Profile</h3>
+		<form method="POST" enctype="multipart/form-data">
 		<!-- here should be the form don't forget about csrf_token -->
 			{% csrf_token %}
 			{{ form.as_p }}
-		<input class="btn btn-info" type="submit" name="Login">
+		<input class="btn btn-info" type="submit" name="Profile Update">
 	</form>
 	{% endblock %}

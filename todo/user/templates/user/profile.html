@@ -62,22 +62,25 @@
 
 
 	<div class="todo-list">
-	<h3>Task</h3>
-		<h2><strong>{{ task_object.name }}</strong></h2>
+	<h3>Profile</h3>
+		<h2><strong>{{ profile.user.username }}</strong></h2>
 		<br>
 		<br>
-		<h2><strong>{{ task_object.user }}</strong></h2>
+		<h2><strong>{{ profile.user.email }}</strong></h2>
 		<br>
 		<br>
-		<h2>{{ task_object.description }}</h2>
+		<h2><strong>{{ profile.date_birth }}</strong></h2>
 		<br>
-		<h2>{{ task_object.created_at }}</h2>
 		<br>
-		<h2>{{ task_object.get_status_display }}</h2>
+		<img src="{{ profile.image.url }}" width="100" height="100">
+		<br>
+		<h2>{{ profile.bio }}</h2>
+		<br>
+		<h2>{{ profile.field }}</h2>
 		<br>
 
-	<a class="btn btn-sm btn-info" href="{% url 'task_update' task_object.id %}">Update</a>
-		<a class="btn btn-sm btn-danger" href="{% url 'task_delete' task_object.id %}">Delete</a>
+	<a class="btn btn-sm btn-info" href="{% url 'profile_update' profile.id %}">Update</a>
+		<a class="btn btn-sm btn-danger" href="#">Delete</a>
 
 	</div>
 </div>
