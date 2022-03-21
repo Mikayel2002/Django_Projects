@@ -1,8 +1,79 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib import messages
+
+import task
 from task.forms import TaskForm, TaskModelForms, TaskUpdateModelForm
 from task.models import Task
+from django.views.generic import (
+    View,
+    ListView,
+    UpdateView,
+    DetailView,
+    CreateView,
+    DeleteView
+)
+
+
+# class TaskListView(View):
+#     def get(self, request):
+#         task_list = Task.objects.all()
+#
+#         context = {"task_list": task_list}
+#
+#         return render(request, "task/index_class.html", context)
+
+
+class TaskListView(LoginRequiredMixin, ListView):
+    model = Task
+    template_name = "task/index_class.html"
+    ordering = "-created_at"
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(user=self.request.user)
+
+    def get_ordering(self):
+        order_var = self.request.GET.get("order_by")
+
+        if order_var:
+            return order_var
+
+        return super().get_ordering()
+
+
+# class TaskCreateView(LoginRequiredMixin, View):
+#     model = Task
+#     template_name = "task/new_task_class.html"
+#     success_url = "task_class_list"
+#     form_class = TaskModelForms
+#
+#     def get(self, request):
+#         form = self.form_class()
+#         context = {"task_form": form}
+#
+#         return render(request, self.template_name, context)
+#
+#     def post(self, request):
+#         form = self.form_class(request.POST)
+#
+#         if form.is_valid():
+#             task = form.save(commit=False)
+#             task.user = request.user
+#             task.save()
+#             messages.success(request, "Created")
+#             return redirect(self.success_url)
+#
+#         messages.success(request, "Failed")
+#         return redirect("task_class_create")
+
+
+class TaskCreateViewGeneric(LoginRequiredMixin, CreateView):
+    model = Task
+    form_class = TaskModelForms
+    template_name = "task/new_task_class.html"
+    success_url = "/tasks_class"
 
 
 # @login_required(login_url="user_login")
@@ -42,7 +113,12 @@ def task_create(request):
 
 @login_required(login_url="user_login")
 def list_task(request):
-    task_list = Task.objects.filter(user=request.user)
+    # task_list = Task.objects.filter(user=request.user)
+    query_string = request.GET.get("search_task")
+    if query_string:
+        task_list = request.user.task_set.filter(name__contains=query_string)
+    else:
+        task_list = request.user.task_set.all()
 
     return render(request, "task/index.html", context={"tasks": task_list})    
 
